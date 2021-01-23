@@ -24,4 +24,4 @@ yarn lint
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
 ### Deploy here.
-<a target="_blank" href="https://user-invoice-app-composition-func.netlify.app/">Here</a>
+<a href="https://user-invoice-app-composition-func.netlify.app/" target="_blank">Here</a>
