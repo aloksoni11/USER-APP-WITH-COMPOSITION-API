@@ -39,6 +39,7 @@
         </div>
 
         <div class="card-body">
+
           <!-- table -->
           <table class="table table-striped">
             <thead>
@@ -67,6 +68,7 @@
           </table>
         </div>
         <div class="card-footer d-flex justify-content-between">
+
           <!-- page length count-->
           <span>
             Showing {{ sliceFilterUsers.length > 0 ? 1 : 0 }} to
@@ -708,7 +710,6 @@ export default {
     const numberPerPage = ref(10); // number per page
     const currentPage = ref(1); // current page
     const selectedRole = ref('All'); // role selected
-    const selectedPlan = ref('All'); // plan selected
 
     // composition function destructure and passing parameters
     const {
@@ -716,11 +717,12 @@ export default {
       totalPage,
     } = useFilter(
       usersList,
-      searchQuery,
       currentPage,
       numberPerPage,
-      selectedRole,
-      selectedPlan,
+      {
+        fullName: searchQuery,
+        role: selectedRole,
+      },
     );
 
     return {
@@ -731,7 +733,6 @@ export default {
       sliceFilterUsers,
       totalPage,
       selectedRole,
-      // selectedPlan,
     };
   },
 };

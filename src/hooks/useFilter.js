@@ -1,20 +1,24 @@
 import { computed, ref, watch } from 'vue';
 
 export default function useFilter(
-  listData, searchQuery, currentPage = 1, numberPerPage = 10, selectedRole = 'All', selectedPlan = 'All',
+  listData,
+  currentPage = 1,
+  numberPerPage = 10,
+  customFilterObj = {},
 ) {
   const currentPageClone = ref(currentPage);
+  const filterKeys = Object.keys(customFilterObj);
 
-  // filter data by input query
-  const filterUsers = computed(() => listData.filter(
-    (item) => item.fullName.toLowerCase().indexOf(searchQuery.value) > -1
-        || item.email.toLowerCase().indexOf(searchQuery.value) > -1,
-  ));
+  // filter function as per data function
+  const filterUsersBySelect = computed(() => listData.filter(
+    (item) => filterKeys.every((eachKey) => {
+      if (!customFilterObj[eachKey].value.length) {
+        return true;
+      }
 
-  // filter data by selected role and selected plan
-  const filterUsersBySelect = computed(() => filterUsers.value.filter(
-    (item) => (selectedRole.value === 'All' ? true : item.role.toLowerCase() === selectedRole.value.toLowerCase())
-      && (selectedPlan.value === 'All' ? true : item.currentPlan.toLowerCase() === selectedPlan.value.toLowerCase()),
+      return (item[eachKey].toLowerCase().includes(customFilterObj[eachKey].value.toLowerCase())
+        || customFilterObj[eachKey].value === 'All');
+    }),
   ));
 
   // slice data as per page
@@ -26,11 +30,6 @@ export default function useFilter(
       return filterUsersBySelect.value.slice(begin, end);
     },
   );
-
-  // watching number per page
-  watch(numberPerPage, () => {
-    currentPageClone.value = 1;
-  });
 
   // handle pagination
   const totalPage = computed(() => {
@@ -44,6 +43,11 @@ export default function useFilter(
       return totalPages;
     }
     return 1;
+  });
+
+  // watching 'total' computed property
+  watch(totalPage, () => {
+    currentPageClone.value = 1;
   });
 
   // returning data and pagination

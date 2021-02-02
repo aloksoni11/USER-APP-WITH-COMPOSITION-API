@@ -726,7 +726,16 @@ export default {
     const {
       sliceFilterUsers,
       totalPage,
-    } = useFilter(usersList, searchQuery, currentPage, numberPerPage, selectedRole, selectedPlan);
+    } = useFilter(
+      usersList,
+      currentPage,
+      numberPerPage,
+      {
+        fullName: searchQuery,
+        currentPlan: selectedPlan,
+        role: selectedRole,
+      },
+    );
 
     return {
       usersList,
